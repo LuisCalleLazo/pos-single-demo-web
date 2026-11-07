@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-icon">🛒</span>
+    <div>
+      <h1>{{ data.tienda }}</h1>
+      <small>{{ data.titulo }}</small>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-view="venta">Venta</button>
+    <button class="tab" data-view="productos">Productos</button>
+    <button class="tab" data-view="ventas">Historial</button>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- ===================== VENTA ===================== -->
+  <section id="view-venta" class="view active">
+    <div class="pos-layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Productos</h2>
+          <input type="search" id="posSearch" placeholder="Buscar producto o categoría…" autocomplete="off">
+        </div>
+        <div id="productGrid" class="product-grid"></div>
+      </div>
+
+      <aside class="panel cart" id="cartPanel">
+        <div class="panel-head">
+          <h2>Carrito</h2>
+          <button class="btn btn-ghost btn-sm" id="clearCart">Vaciar</button>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+
+        <div class="totals">
+          <div class="row"><span>Total</span><strong id="cartTotal">0.00</strong></div>
+          <label class="field">
+            <span>Monto recibido</span>
+            <input type="number" id="received" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+          </label>
+          <div class="row"><span>Cambio</span><strong id="change">0.00</strong></div>
+          <button class="btn btn-primary btn-block" id="checkout">Cobrar</button>
+        </div>
+      </aside>
+    </div>
+    <button class="fab" id="fabCart" aria-label="Ir al carrito">🧾 <span id="fabCount">0</span></button>
+  </section>
+
+  <!-- ===================== PRODUCTOS ===================== -->
+  <section id="view-productos" class="view">
+    <div class="panel">
+      <div class="panel-head">
+        <h2 id="formTitle">Registrar producto</h2>
+      </div>
+      <form id="productForm" class="form-grid" autocomplete="off">
+        <input type="hidden" id="pId">
+        <label class="field">
+          <span>Nombre *</span>
+          <input type="text" id="pName" required maxlength="60" placeholder="Ej. Gaseosa 2L">
+        </label>
+        <label class="field">
+          <span>Categoría</span>
+          <input type="text" id="pCategory" maxlength="40" placeholder="Ej. Bebidas">
+        </label>
+        <label class="field">
+          <span>Precio de venta *</span>
+          <input type="number" id="pPrice" required min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+        </label>
+        <label class="field">
+          <span>Stock (vacío = sin control)</span>
+          <input type="number" id="pStock" min="0" step="1" inputmode="numeric" placeholder="Ej. 20">
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="saveProduct">Guardar producto</button>
+          <button type="button" class="btn btn-ghost" id="cancelEdit" hidden>Cancelar edición</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Listado</h2>
+        <div class="head-actions">
+          <input type="search" id="prodSearch" placeholder="Buscar…" autocomplete="off">
+          <button class="btn btn-ghost btn-sm" id="loadSamples">Cargar ejemplos</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="productTable">
+          <thead>
+            <tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty" id="prodEmpty" hidden>Aún no hay productos registrados.</p>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORIAL ===================== -->
+  <section id="view-ventas" class="view">
+    <div class="stats">
+      <div class="stat"><small>Ventas hoy</small><strong id="statTodayCount">0</strong></div>
+      <div class="stat"><small>Total hoy</small><strong id="statTodayTotal">0.00</strong></div>
+      <div class="stat"><small>Total acumulado</small><strong id="statAllTotal">0.00</strong></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Ventas realizadas</h2>
+        <div class="head-actions">
+          <button class="btn btn-ghost btn-sm" id="exportCsv">Exportar CSV</button>
+          <button class="btn btn-danger btn-sm" id="clearSales">Borrar historial</button>
+        </div>
+      </div>
+      <div id="salesList" class="sales-list"></div>
+      <p class="empty" id="salesEmpty" hidden>Todavía no hay ventas.</p>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+{% endblock %}
